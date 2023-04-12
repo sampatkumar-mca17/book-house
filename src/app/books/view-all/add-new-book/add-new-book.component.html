@@ -1,0 +1,49 @@
+<div mat-dialog-content>
+  <mat-card>
+   <mat-card-header>
+    <mat-card-title>
+      <h1>{{mode === 'new'? newModeText: editModeText}}</h1>
+    </mat-card-title>
+   </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="formGroup">
+        <div>
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input type="text" matInput formControlName="title" >
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Image URL</mat-label>
+            <input type="text" matInput formControlName="imageUrl" >
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Publish Date</mat-label>
+            <input type="number" matInput min="0" formControlName="publishDate">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Purchase Link</mat-label>
+            <input type="text" matInput min="0" formControlName="purchaseLink">
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-flat-button
+        [disabled]="formGroup.invalid"
+        [mat-dialog-close]="formGroup.value"
+
+      >
+        {{mode === 'new' ? 'Add' : 'Update' }}
+      </button>
+      <button mat-flat-button mat-dialog-close > Cancel</button>
+
+    </mat-card-actions>
+  </mat-card>
+</div>

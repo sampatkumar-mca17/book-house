@@ -1,0 +1,22 @@
+<div mat-dialog-content>
+  <mat-card>
+   <mat-card-header>
+    <mat-card-title>
+      <span class="bold-text">{{data.name}}</span>
+    </mat-card-title>
+    <img [src]="'assets/blankprofile.png'" mat-card-avatar alt="">
+   </mat-card-header>
+   <img [src]="'assets/blankprofile.png'" class="body-image" mat-card-xl-image alt="">
+   <br>
+    <mat-card-content>
+      <div>
+        <span class="bold-text">DOB: </span>
+        <span>{{data.birthday}}</span>
+      </div> <br>
+      <div>
+        <span class="bold-text">Birth Place: </span>
+        <span>{{data.birthPlace}}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

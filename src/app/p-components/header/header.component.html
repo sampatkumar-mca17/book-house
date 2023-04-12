@@ -1,0 +1,13 @@
+<mat-toolbar class="header">
+  <mat-toolbar-row >
+    <h1>Book House</h1>
+    <span class="spacer"></span>
+    <mat-menu #profile>
+      <button mat-menu-item (click)="onProfileClicked()">Profile</button>
+    </mat-menu>
+    <span [matMenuTriggerFor]="profile" *ngIf="!isHandset">{{author?.name}}</span>
+    <button mat-icon-button [matMenuTriggerFor]="profile"  aria-label="Example icon-button with heart icon">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>

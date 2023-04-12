@@ -1,0 +1,152 @@
+<app-header [author]="author" [isHandset]="isHandset" (profileClicked)="openProfileDialog()">
+</app-header>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button (click)="openAddNewComponent('new')" mat-flat-button color="secondary">
+      Add new book
+      <mat-icon>add</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <button [matMenuTriggerFor]="sortMenu" mat-flat-button color="secondary">
+      <mat-icon>sort</mat-icon>
+    </button>
+    <mat-menu #sortMenu>
+      <button mat-menu-item (click)="sortBooksByTitle()"> Sort by title(Alphabetically) </button>
+      <button mat-menu-item (click)="sortBooksByDate()"> Sort by published date </button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="grid-container">
+  <span *ngIf="noData">No data available</span>
+  <mat-grid-list cols="2" [gutterSize]="'10px'" rowHeight="450px" class="content">
+    <mat-grid-tile
+      [class.mat-elevation-z8] = "true"
+      *ngFor="let card of cards | async"
+      [colspan]="cols"
+      [rowspan]="rows"
+    >
+      <mat-card class="dashboard-card">
+        <mat-card-header class="text-center">
+          <!--
+            if the device used is desktop to cover the wider space putting image and text next to each other
+           -->
+          <ng-container
+            [ngTemplateOutlet]="cardTitleGroupTemplate"
+            [ngTemplateOutletContext]="{card}"
+            *ngIf="!isHandset; else handset"
+          ></ng-container>
+
+          <!--
+            if the device used is a handset, just have title text in header and use image outside the header
+          -->
+          <ng-template #handset>
+            <ng-container
+              [ngTemplateOutlet]="cardTitleTemplate"
+              [ngTemplateOutletContext]="{card}"
+            ></ng-container>
+          </ng-template>
+        </mat-card-header>
+          <!--
+            if the device used is a handset, using image outside the header to effectively use space
+          -->
+        <ng-container
+          [ngTemplateOutlet]="cardImgTemplate"
+          [ngTemplateOutletContext]="{card}"
+          *ngIf="isHandset"
+        >
+        </ng-container>
+
+        <!-- content of book -->
+        <mat-card-content mat-card- class="dashboard-card-content">
+          <ng-container
+            [ngTemplateOutlet]="bookTemplate"
+            [ngTemplateOutletContext]="{card}"
+          >
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+<!-- Reusable templates for book and author -->
+<ng-template #bookTemplate let-card="card">
+ <span class="card-content">
+  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+ </span>
+</ng-template>
+
+<ng-template #authorTemplate let-card="card">
+  <h3 class="mat-h3">Author: <small>{{author.name}}</small></h3>
+  <h3 class="mat-h3">DOB: <small>{{author.birthday}}</small></h3>
+  <h3 class="mat-h3">Birth Place: <small>{{author.birthPlace}}</small></h3>
+</ng-template>
+
+<ng-template #cardTitleTemplate let-card="card">
+  <mat-card-title>
+    <span>
+      <h3>
+        <a
+          [ngClass]="{'w-100':isHandset}"
+          target="_blank"
+          [href]="card.purchaseLink"
+          [ngClass]="{linkToPurchase:!card.isHandset}"
+          [title]="'click to purchase this book'"
+        >
+          {{ card.title }} ({{ card.publishDate }})
+        </a>
+        <span>
+          <button mat-icon-button (click)="openAddNewComponent('edit',card.id)"> <mat-icon>edit</mat-icon></button>
+        </span>
+        <span>
+          <button mat-icon-button (click)="deleteBook(card.id)"> <mat-icon>delete</mat-icon></button>
+        </span>
+      </h3>
+    </span>
+  </mat-card-title>
+</ng-template>
+
+<ng-template #cardSubtitleTemplate let-card="card">
+  <mat-card-subtitle *ngIf="card.type === 'book'">
+    <ng-container
+      [ngTemplateOutlet]="bookTemplate"
+      [ngTemplateOutletContext]="{card}"
+    >
+    </ng-container>
+  </mat-card-subtitle>
+</ng-template>
+
+<ng-template #cardImgTemplate let-card="card">
+  <picture>
+    <source
+      mat-card-xl-image
+      media="(min-width: 1440px)"
+      [srcset]="card.imageUrl"
+    />
+    <source
+      mat-card-xl-image
+      media="(min-width: 900px)"
+      [srcset]="card.imageUrl"
+    />
+    <source
+      mat-card-lg-image
+      media="(min-width: 200px)"
+      [srcset]="card.imageUrl"
+    />
+    <img mat-card-xl-image [src]="" card.imageUrl alt="" />
+  </picture>
+</ng-template>
+
+<ng-template #cardTitleGroupTemplate let-card="card">
+  <mat-card-title-group>
+    <ng-container
+      [ngTemplateOutlet]="cardTitleTemplate"
+      [ngTemplateOutletContext]="{card}"
+    ></ng-container>
+    <ng-container
+      [ngTemplateOutlet]="cardImgTemplate"
+      *ngIf="card.type === 'book'"
+      [ngTemplateOutletContext]="{card}"
+    ></ng-container>
+  </mat-card-title-group>
+</ng-template>
